@@ -52,6 +52,19 @@
                 <div class="well">
                     You start in the upper left corner with a single rectangle. By clicking on a color in the color list at the top, you choose which of the neighbour fields you would like to take over. After each step the field is redrawn and the step counter increased. Aim of the game is to take over all of the fields.
                 </div>
+
+
+                <div class="well">
+                    <h4 id="move-indicator">Moves: 0</h4>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 text-center">
+                <canvas id="canvas" width="400" height="400"></canvas>
+            </div>
+
+            <div class="col-xs-12 col-sm-3 text-center">
+
                 <div class="well">
                     <button type="button" class="btn btn-primary btn-reset"> <span class="glyphicon glyphicon-refresh"></span> Start new game</button>
                     <div class="radio">
@@ -81,18 +94,12 @@
 
                 </div>
 
-                <div class="well">
-                    <h4 id="move-indicator">Moves: 0</h4>
-                </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 text-center">
-                <canvas id="canvas" width="400" height="400"></canvas>
             </div>
 
 
 
-            <div class="col-xs-12 col-sm-6  text-center">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
                 <h4>Controls</h4>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default btn-color btn-color-1" data-color="255,147,204"></button>
