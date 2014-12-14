@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>ColorBrunch</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <nav class="navbar navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">ColorBrunch</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+
+
+    <div class="container">
+      <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
+                <div class="well">
+                    You start in the upper left corner with a single rectangle. By clicking on a color in the color list at the top, you choose which of the neighbour fields you would like to take over. After each step the field is redrawn and the step counter increased. Aim of the game is to take over all of the fields.
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
+                <canvas id="canvas" width="400" height="400"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default btn-color btn-color-1" data-color="255,147,204"></button>
+                    <button type="button" class="btn btn-default btn-color btn-color-2" data-color="219,143,248"></button>
+                    <button type="button" class="btn btn-default btn-color btn-color-3" data-color="164,143,248"></button>
+                    <button type="button" class="btn btn-default btn-color btn-color-4" data-color="143,183,248"></button>
+                    <button type="button" class="btn btn-default btn-color btn-color-5" data-color="143,220,248"></button>
+                    <button type="button" class="btn btn-default btn-color btn-color-6" data-color="143,248,151"></button>
+                </div>
+            </div>
+        </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy;</p>
+      </footer>
+    </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+
+
+    </body>
+</html>
