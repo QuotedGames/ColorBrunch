@@ -7,6 +7,7 @@ $(document).ready(function(){
 
 
 function Game() {
+    this.debug = false;
     this.colors = [[255, 147, 204], [219, 143, 248], [164, 143, 248], [143, 183, 248], [143, 220, 248], [143, 248, 151]];
     this.colorEmpty = [254, 255, 147];
     this.canvas = document.getElementById('canvas');
@@ -14,8 +15,9 @@ function Game() {
     this.canvasHeight = 400;
     this.canvasWidth = 400;
 
-    this.boxWith = 20;
-    this.boxHeight = 20;
+    this.boxWith = 40;
+    this.boxHeight = 40;
+    this.emptyRectsCache = [];
 
 
     this.rows  = this.canvasHeight / this.boxHeight;
@@ -28,7 +30,7 @@ function Game() {
     }
 
     if(!this.ctx) {
-        console.log("Error: ctx is not found.");
+        if(this.debug) console.log("Error: ctx is not found.");
         return;
     }
 
@@ -39,7 +41,7 @@ function Game() {
 
 Game.prototype.initialRender = function() {
 
-    var i, j, color;
+    var i, j, color, count = 0;
     // fill canvas.
 
     for(i = 0; i <= (this.canvasWidth - this.boxWith); i += this.boxWith) {
@@ -54,6 +56,7 @@ Game.prototype.initialRender = function() {
                 this.boxWith,
                 this.boxHeight
             );
+            count++;
 
         }
     }
@@ -62,8 +65,13 @@ Game.prototype.initialRender = function() {
     this.ctx.fillStyle = this.rgba(this.colorEmpty, 1);
     this.ctx.fillRect(0, 0, this.boxWith, this.boxHeight);
     this.ctx.save();
+
+    if(this.debug) console.log(count + " rects generated");
 };
 
+Game.prototype.cacheEmpty = function(rect) {
+    this.emptyRectsCache.push(rect.join("_"));
+};
 
 Game.prototype.initControls = function() {
     var self = this;
@@ -97,9 +105,9 @@ Game.prototype.makeTurn = function(color) {
             b = rect.data[2];
 
             if(this.colorMatch(this.colorEmpty, rect.data)) {
-                console.log("empty block found: (" + i + ", " + j + ", " + (i+this.boxWith) + "," + (j+this.boxWith) + ")");
+                if(this.debug) console.log("empty block found: (" + i + ", " + j + ", " + (i+this.boxWith) + "," + (j+this.boxWith) + ")");
                 removed = this.removeNeighbours([i, j, this.boxWith, this.boxHeight], color);
-                console.log(removed + " Neighbours removed");
+                if(this.debug) console.log(removed + " Neighbours removed");
             } else {
                 noMoreColors = false;
             }
@@ -135,6 +143,7 @@ Game.prototype.removeNeighbours = function(pos, color) {
                 target[3]
             );
 
+            this.cacheEmpty(target);
             removed++;
         }
     }
@@ -172,20 +181,25 @@ Game.prototype.generateTargets = function(pos) {
         maxHeight = this.canvasHeight - this.boxHeight;
 
     targets.push([pos[0],                 pos[1] - this.boxHeight, this.boxWith, this.boxHeight]); // n
-    targets.push([pos[0] + this.boxWith,  pos[1] - this.boxHeight, this.boxWith, this.boxHeight]); // ne
+    //targets.push([pos[0] + this.boxWith,  pos[1] - this.boxHeight, this.boxWith, this.boxHeight]); // ne
     targets.push([pos[0] + this.boxWith,  pos[1],                  this.boxWith, this.boxHeight]); // e
-    targets.push([pos[0] + this.boxWith,  pos[1] + this.boxHeight, this.boxWith, this.boxHeight]); // se
+    //targets.push([pos[0] + this.boxWith,  pos[1] + this.boxHeight, this.boxWith, this.boxHeight]); // se
     targets.push([pos[0],                 pos[1] + this.boxHeight, this.boxWith, this.boxHeight]); // s
-    targets.push([pos[0] - this.boxWith,  pos[1] + this.boxHeight, this.boxWith, this.boxHeight]); // sw
+    //targets.push([pos[0] - this.boxWith,  pos[1] + this.boxHeight, this.boxWith, this.boxHeight]); // sw
     targets.push([pos[0] - this.boxWith,  pos[1],                  this.boxWith, this.boxHeight]); // w
-    targets.push([pos[0] - this.boxWith,  pos[1] - this.boxHeight, this.boxWith, this.boxHeight]); // nw
+    //targets.push([pos[0] - this.boxWith,  pos[1] - this.boxHeight, this.boxWith, this.boxHeight]); // nw
 
 
     // filter invalid targets
     for(i = targets.length - 1; i >= 0 ; i--) {
         d = targets[i];
 
+
         if(d[0] < 0 || d[1] < 0 || d[2] >= maxWidth || d[3] >= maxHeight) {
+            targets.splice(i, 1);
+        }
+
+        if(this.emptyRectsCache.indexOf(d.join("_")) > -1) {
             targets.splice(i, 1);
         }
     }
