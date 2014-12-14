@@ -64,9 +64,8 @@ function Game() {
 Game.prototype.calculateDimensions = function(difficulty) {
     var difficultyLevels = {
         "1" : 40,
-        "2" : 30,
-        "3" : 20,
-        "4" : 15
+        "2" : 25,
+        "3" : 10
     };
 
     this.boxHeight = difficultyLevels[difficulty];
