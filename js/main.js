@@ -1,3 +1,17 @@
+// shim layer with setTimeout fallback
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame    ||
+    window.oRequestAnimationFrame      ||
+    window.msRequestAnimationFrame     ||
+    function( callback ){
+        window.setTimeout(callback, 1000 / 60);
+    };
+})();
+
+
+
 $(document).ready(function(){
 
     var game = new Game();
@@ -122,7 +136,7 @@ Game.prototype.makeTurn = function(color) {
 
 
 Game.prototype.removeNeighbours = function(pos, color) {
-    var i, j, removed = 0, target, targetRect;
+    var i, j, removed = 0, target, targetRect, pg;
 
     var targets = this.generateTargets(pos);
     for(i = 0; i < targets.length; i++) {
@@ -144,10 +158,17 @@ Game.prototype.removeNeighbours = function(pos, color) {
             );
 
             this.cacheEmpty(target);
+
+            // animate particles
+            //pg = new ParticleGenerator(target, color);
+            //pg.start(this.ctx);
+
+
             removed++;
         }
     }
-    this.ctx.save();
+
+    //this.ctx.save();
 
     return removed;
 
@@ -164,14 +185,13 @@ Game.prototype.colorMatch = function(color1, color2) {
 };
 
 Game.prototype.rgba = function(rgb, a) {
-    if(typeof a === "undefined") a = 1;
+    //if(typeof a === "undefined") a = .5;
+    a |= 0.5;
     return 'rgba(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ', ' + a + ')';
 };
 
 
-Game.prototype.ctxFillRect = function(ctx, rect) {
-    ctx.fillRect(rect[0],rect[1], rect[2], rect[3]);
-};
+
 
 
 Game.prototype.generateTargets = function(pos) {
@@ -208,3 +228,66 @@ Game.prototype.generateTargets = function(pos) {
     return targets;
 
 };
+
+
+
+function ParticleGenerator(rect, color) {
+    var i;
+
+    this.particles = [];
+    this.count = 40;
+    this.timer = null;
+
+    for(i = 0; i < this.count; i++) {
+        this.particles.push(new Particle(rect, color));
+    }
+}
+
+ParticleGenerator.prototype.start = function(ctx) {
+    var self = this;
+    ctx.globalCompositeOperation = "source-over";
+    this.timer = setInterval(function(){
+        self.draw(ctx);
+    }, 1000 / 60)
+};
+
+ParticleGenerator.prototype.draw = function(ctx) {
+    var i, p;
+
+    if(this.particles.length == 0)
+        clearInterval(this.timer);
+
+    for(i = this.particles.length - 1; i >= 0 ; i--) {
+        p = this.particles[i];
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = "rgba(" + p.r + ", " + p.g + ", " + p.b + ", 0.5)";
+        ctx.fill();
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.radius += .08;
+
+        if(p.radius > 3)
+            this.particles.splice(i, 1);
+    }
+};
+
+
+function Particle(rect, color) {
+
+    // center
+    this.x = (rect[0] + rect[0] + rect[2]) / 2;
+    this.y = (rect[1] + rect[1] + rect[3]) / 2;
+
+
+    this.radius = 1;
+
+    this.vx = -5 + Math.random()*10;
+    this.vy = -5 + Math.random()*10;
+
+    this.r = color[0];
+    this.g = color[1];
+    this.b = color[2];
+}
