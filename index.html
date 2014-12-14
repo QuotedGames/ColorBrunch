@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <style>
             body {
-                padding-top: 50px;
+                padding-top: 80px;
                 padding-bottom: 20px;
             }
         </style>
@@ -25,7 +25,7 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-    <nav class="navbar navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -48,21 +48,52 @@
     <div class="container">
       <!-- Example row of columns -->
         <div class="row">
-            <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
+            <div class="col-xs-12 col-sm-3 text-center">
                 <div class="well">
                     You start in the upper left corner with a single rectangle. By clicking on a color in the color list at the top, you choose which of the neighbour fields you would like to take over. After each step the field is redrawn and the step counter increased. Aim of the game is to take over all of the fields.
                 </div>
-            </div>
-        </div>
+                <div class="well">
+                    <button type="button" class="btn btn-primary btn-reset"> <span class="glyphicon glyphicon-refresh"></span> Start new game</button>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="difficulty" value="1" checked>
+                            Easy
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="difficulty" value="2">
+                            Medium
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="difficulty" value="3">
+                            Hard
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label class="text-danger">
+                            <input type="radio" name="difficulty" value="4">
+                            Nightmare
+                        </label>
+                    </div>
 
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
+                </div>
+
+                <div class="well">
+                    <h4 id="move-indicator">Moves: 0</h4>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 text-center">
                 <canvas id="canvas" width="400" height="400"></canvas>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
+
+
+            <div class="col-xs-12 col-sm-6  text-center">
+                <h4>Controls</h4>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default btn-color btn-color-1" data-color="255,147,204"></button>
                     <button type="button" class="btn btn-default btn-color btn-color-2" data-color="219,143,248"></button>
@@ -73,8 +104,9 @@
                 </div>
             </div>
         </div>
+        <hr>
 
-      <hr>
+
 
       <footer>
         <p>&copy;</p>

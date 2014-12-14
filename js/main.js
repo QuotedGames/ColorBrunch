@@ -14,6 +14,7 @@ window.requestAnimFrame = (function(){
 
 $(document).ready(function(){
 
+
     var game = new Game();
 
 
@@ -29,10 +30,15 @@ function Game() {
     this.canvasHeight = 400;
     this.canvasWidth = 400;
 
-    this.boxWith = 40;
-    this.boxHeight = 40;
-    this.emptyRectsCache = [];
+    this.difficulty = 1; // easy
 
+
+    this.emptyRectsCache = [];
+    this.moves = 0;
+
+
+    this.boxWith = 20;
+    this.boxHeight = 20;
 
     this.rows  = this.canvasHeight / this.boxHeight;
     this.columns = this.rows;
@@ -48,10 +54,40 @@ function Game() {
         return;
     }
 
+    this.moveIndicator = document.getElementById('move-indicator');
+
 
     this.initControls();
-    this.initialRender();
+    this.resetGame();
 }
+
+Game.prototype.calculateDimensions = function(difficulty) {
+    var difficultyLevels = {
+        "1" : 40,
+        "2" : 30,
+        "3" : 20,
+        "4" : 15
+    };
+
+    this.boxHeight = difficultyLevels[difficulty];
+    this.boxWith = difficultyLevels[difficulty];
+
+    this.rows  = this.canvasHeight / this.boxHeight;
+    this.columns = this.rows;
+
+};
+
+Game.prototype.resetGame = function() {
+    this.moves = 0;
+    this.emptyRectsCache = [];
+    this.calculateDimensions(this.difficulty);
+    this.initialRender();
+};
+
+Game.prototype.showMoves = function(count) {
+
+    this.moveIndicator.innerText = 'Moves: ' + count;
+};
 
 Game.prototype.initialRender = function() {
 
@@ -90,10 +126,21 @@ Game.prototype.cacheEmpty = function(rect) {
 Game.prototype.initControls = function() {
     var self = this;
 
-    $('html, body').on("click", ".btn-color", function(e){
-        if(e) e.preventDefault();
+    $(document).on("click", ".btn-color", function(e){
+        if(e)
+            e.preventDefault();
+
+
         var color = $(this).attr("data-color").split(",");
         self.makeTurn(color);
+    });
+
+    $(document).on("click", ".btn-reset", function(e){
+        if(e)
+            e.preventDefault();
+        var d = $("input[name=difficulty]:checked").val();
+        self.difficulty = d;
+        self.resetGame();
     });
 };
 
@@ -101,6 +148,9 @@ Game.prototype.initControls = function() {
 Game.prototype.makeTurn = function(color) {
 
     var i, j, rect, r, g, b, noMoreColors = true, removed;
+
+    this.moves++;
+    this.showMoves(this.moves);
 
 
     for(i = 0; i <= (this.canvasWidth - this.boxWith); i += this.boxWith) {
@@ -130,7 +180,16 @@ Game.prototype.makeTurn = function(color) {
 
 
     if(noMoreColors) {
-        alert("You win motherfucker!");
+        // game over
+        this.ctx.font = "25px Verdana";
+        var gradient = this.ctx.createLinearGradient(0, 0, 400, 0);
+        gradient.addColorStop("0","magenta");
+        gradient.addColorStop("0.5","blue");
+        gradient.addColorStop("1.0","red");
+        this.ctx.fillStyle = gradient;
+        this.ctx.textAlign = "center";
+        this.ctx.fillText("Game over\nMoves made: " + this.moves, 200, 180);
+
     }
 };
 
